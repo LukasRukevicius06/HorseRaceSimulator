@@ -6,7 +6,7 @@ import java.lang.Math;
  * for a given distance
  * 
  * @author Lukas Rukevicius
- * @version 1.1
+ * @version 1.2
  */
 public class Race
 {
@@ -89,6 +89,12 @@ public class Race
             {
                 finished = true;
             }
+            else if (allFallen())
+            {
+                finished = true;
+                System.out.println("Race ended in a draw. All horses have fallen!");
+                return;
+            }
            
             //wait for 100 milliseconds
             try{ 
@@ -96,7 +102,7 @@ public class Race
             }catch(Exception e){}
         }
 
-        System.out.println("Race ended, the winner was: " + winnerHorse);
+        System.out.println("Race ended, the winner was: " + winnerHorse.getName());
     }
     
     /**
@@ -223,4 +229,10 @@ public class Race
             i = i + 1;
         }
     }
+
+    private boolean allFallen()
+    {
+        return lane1Horse.hasFallen() && lane2Horse.hasFallen() && lane3Horse.hasFallen();
+    }
+
 }
