@@ -3,26 +3,25 @@ import java.awt.*;
 
 public class RaceGUI extends JFrame
 {
+    public static void main(String[] args) {
+        JButton startButton = new JButton("Start");
+        JButton resetButton = new JButton("Reset");
 
-    private JButton startButton;
-    private JButton resetButton;
+        // This ensures that the button will be sized to fit its label
+        startButton.setSize(startButton.getPreferredSize());
+        resetButton.setSize(resetButton.getPreferredSize());
+        // Set the position of the button
+        startButton.setLocation(300, 250);
+        resetButton.setLocation(200, 250);
 
-    public RaceGUI()
-    {
-        setTitle("Horse Race Simulator");
-        setSize(1000, 500);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLayout(new FlowLayout());
+        startButton.addActionListener(e -> JOptionPane.showMessageDialog(null, "The racing simulator has begun!"));
 
-        startButton = new JButton("Start");
-        resetButton = new JButton("Reset");
-
-        add(startButton);
-        add(resetButton);
-    }
-
-    public static void main(String[] args)
-    {
-            new RaceGUI().setVisible(true);
+        JFrame frame = new JFrame("Horse Race Simulator");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLayout(null); // Use absolute positioning
+        frame.add(startButton);
+        frame.add(resetButton);
+        frame.setSize(1000,500);
+        frame.setVisible(true);
     }
 }
