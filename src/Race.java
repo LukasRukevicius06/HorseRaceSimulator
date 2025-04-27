@@ -102,7 +102,7 @@ public class Race
             }catch(Exception e){}
         }
 
-        System.out.println("Race ended, the winner was: " + winnerHorse.getName());
+        System.out.println("Race ended, the winner was: " + (winnerHorse.getName()).toUpperCase());
     }
     
     /**
@@ -211,6 +211,10 @@ public class Race
         
         //print the | for the end of the track
         System.out.print('|');
+
+        System.out.print(' ');
+        System.out.print((theHorse.getName()).toUpperCase());
+        System.out.print(" (Current confidence " + theHorse.getConfidence() + ")");
     }
         
     
