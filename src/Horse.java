@@ -4,7 +4,7 @@
  * each horse has its own stats that affect its race outcome
  * 
  * @ author Lukas Rukevicius
- * @ version 1.1
+ * @ version 1.2
  */
 public class Horse
 {
@@ -25,6 +25,8 @@ public class Horse
        this.horseSymbol = horseSymbol;
        this.horseName = horseName;
        this.horseConfidence = horseConfidence;
+       this.horseFall = false;
+       this.distance = 0;
     }
     
     

@@ -1,19 +1,18 @@
 import java.util.concurrent.TimeUnit;
 import java.lang.Math;
+import java.util.ArrayList;
 
 /**
  * A three-horse race, each horse running in its own lane
  * for a given distance
  * 
  * @author Lukas Rukevicius
- * @version 1.2
+ * @version 1.3
  */
 public class Race
 {
     private final int raceLength;
-    private Horse lane1Horse;
-    private Horse lane2Horse;
-    private Horse lane3Horse;
+    private ArrayList<Horse> horses;
     private Horse winnerHorse;
 
     /**
@@ -26,9 +25,7 @@ public class Race
     {
         // initialise instance variables
         raceLength = distance;
-        lane1Horse = null;
-        lane2Horse = null;
-        lane3Horse = null;
+        horses = new ArrayList<>();
         winnerHorse = null;
     }
     
@@ -36,26 +33,12 @@ public class Race
      * Adds a horse to the race in a given lane
      * 
      * @param theHorse the horse to be added to the race
-     * @param laneNumber the lane that the horse will be added to
+     * @var horses the arrayList that will store all horses
      */
-    public void addHorse(Horse theHorse, int laneNumber)
+
+    public void addHorse(Horse theHorse)
     {
-        if (laneNumber == 1)
-        {
-            lane1Horse = theHorse;
-        }
-        else if (laneNumber == 2)
-        {
-            lane2Horse = theHorse;
-        }
-        else if (laneNumber == 3)
-        {
-            lane3Horse = theHorse;
-        }
-        else
-        {
-            System.out.println("Cannot add horse to lane " + laneNumber + " because there is no such lane");
-        }
+        horses.add(theHorse);
     }
     
     /**
@@ -68,30 +51,36 @@ public class Race
     {
         //declare a local variable to tell us when the race is finished
         boolean finished = false;
-        
-        //reset all the lanes (all horses not fallen and back to 0). 
-        lane1Horse.goBackToStart();
-        lane2Horse.goBackToStart();
-        lane3Horse.goBackToStart();
+
+        //run a for loop through horses arrayList to make them all go back to start distance 0
+        for (Horse horse : horses)
+        {
+            horse.goBackToStart();
+        }
                       
         while (!finished)
         {
             //move each horse
-            moveHorse(lane1Horse);
-            moveHorse(lane2Horse);
-            moveHorse(lane3Horse);
+            for (Horse horse : horses)
+            {
+                moveHorse(horse);
+            }
                         
             //print the race positions
             printRace();
             
             //if any of the three horses has won the race is finished
-            if ( raceWonBy(lane1Horse) || raceWonBy(lane2Horse) || raceWonBy(lane3Horse) )
+            for (Horse horse : horses)
             {
-                finished = true;
+                if (raceWonBy(horse))
+                {
+                    finished = true;
+                    break;
+                }
             }
-            else if (allFallen())
+
+            if (allFallen())
             {
-                finished = true;
                 System.out.println("Race ended in a draw. All horses have fallen!");
                 return;
             }
@@ -114,20 +103,14 @@ public class Race
      */
     private void moveHorse(Horse theHorse)
     {
-        //if the horse has fallen it cannot move, 
-        //so only run if it has not fallen
-        if  (!theHorse.hasFallen())
+        if (!theHorse.hasFallen())
         {
-            //the probability that the horse will move forward depends on the confidence;
             if (Math.random() < theHorse.getConfidence())
             {
-               theHorse.moveForward();
+                theHorse.moveForward();
             }
-            
-            //the probability that the horse will fall is very small (max is 0.1)
-            //but will also will depends exponentially on confidence 
-            //so if you double the confidence, the probability that it will fall is *2
-            if (Math.random() < (0.1*theHorse.getConfidence()*theHorse.getConfidence()))
+
+            if (Math.random() < (0.1 * theHorse.getConfidence() * theHorse.getConfidence()))
             {
                 theHorse.fall();
             }
@@ -142,7 +125,7 @@ public class Race
      */
     private boolean raceWonBy(Horse theHorse)
     {
-        if (theHorse.getDistanceTravelled() == raceLength)
+        if (theHorse.getDistanceTravelled() >= raceLength)
         {
             winnerHorse = theHorse;
             return true;
@@ -158,22 +141,19 @@ public class Race
      */
     private void printRace()
     {
-        System.out.print('\u000C');  //clear the terminal window
-        
-        multiplePrint('=',raceLength+3); //top edge of track
+        System.out.print('\u000C');
+
+        multiplePrint('=', raceLength + 3);
         System.out.println();
-        
-        printLane(lane1Horse);
+
+        for (Horse horse : horses)
+        {
+            printLane(horse);
+            System.out.println();
+        }
+
+        multiplePrint('=', raceLength + 3);
         System.out.println();
-        
-        printLane(lane2Horse);
-        System.out.println();
-        
-        printLane(lane3Horse);
-        System.out.println();
-        
-        multiplePrint('=',raceLength+3); //bottom edge of track
-        System.out.println();    
     }
     
     /**
@@ -236,7 +216,13 @@ public class Race
 
     private boolean allFallen()
     {
-        return lane1Horse.hasFallen() && lane2Horse.hasFallen() && lane3Horse.hasFallen();
+        for (Horse horse : horses)
+        {
+            if (!horse.hasFallen())
+            {
+                return false;
+            }
+        }
+        return true;
     }
-
 }
