@@ -214,7 +214,7 @@ public class Race
         }
     }
 
-    private boolean allFallen()
+    public boolean allFallen()
     {
         for (Horse horse : horses)
         {
@@ -225,4 +225,17 @@ public class Race
         }
         return true;
     }
+
+    public ArrayList<Horse> getHorses() {
+        return horses;
+    }
+
+    public int getRaceLength() {
+        return raceLength;
+    }
+
+    public Horse getWinner() {
+        return winnerHorse;
+    }
+
 }
